@@ -4,4 +4,4 @@ A program implemented in Go that groups similar images in a given directory or f
 ## Dependencies
 * [go-fourier](https://github.com/ardabasaran/go-fourier) package.
 
-    ``` go get https://github.com/ardabasaran/go-fourier```
+    ``` go get github.com/ardabasaran/go-fourier```
