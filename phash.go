@@ -7,9 +7,12 @@ import (
 	"log"
 )
 
+// Phash calculates a hash value for the given image. It implements the pHash algorithm as explained here:
+// http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
+// Returns the hash of the image in 64 bits integer.
 func Phash(img *image.Image) uint64 {
 	// resize the image
-	resizedImage:= resize.Resize(32, 32, *img, INTERP)
+	resizedImage := resize.Resize(32, 32, *img, INTERP)
 
 	// get the gray image
 	grayImage := imageToGray(&resizedImage)

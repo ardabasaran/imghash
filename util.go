@@ -19,7 +19,7 @@ func getAverageGray(img *image.Gray) uint64 {
 			sum += uint64(img.GrayAt(i, j).Y)
 		}
 	}
-	return sum / uint64(width * height)
+	return sum / uint64(width*height)
 }
 
 func getAverageArray(arr [][]float64, ignoreFirst bool) uint64 {
@@ -35,9 +35,9 @@ func getAverageArray(arr [][]float64, ignoreFirst bool) uint64 {
 		}
 	}
 	if ignoreFirst {
-		return sum / (uint64(width * height) - 1)
+		return sum / (uint64(width*height) - 1)
 	}
-	return sum / uint64(width * height)
+	return sum / uint64(width*height)
 }
 
 func saveImage(img image.Image, filename string) {
@@ -52,4 +52,3 @@ func saveImage(img image.Image, filename string) {
 		os.Exit(1)
 	}
 }
-

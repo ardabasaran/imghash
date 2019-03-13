@@ -5,9 +5,12 @@ import (
 	"image"
 )
 
+// Ahash calculates a hash value for the given image. It implements the Average hash algorithm as explained here:
+// http://www.hackerfactor.com/blog/index.php?/archives/432-Looks-Like-It.html
+// Returns the hash of the image in 64 bits integer.
 func Ahash(img *image.Image) uint64 {
 	// resize the image
-	resizedImage:= resize.Resize(8, 8, *img, INTERP)
+	resizedImage := resize.Resize(8, 8, *img, INTERP)
 
 	// get the gray image
 	grayImage := imageToGray(&resizedImage)

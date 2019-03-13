@@ -11,13 +11,12 @@ import (
 	"testing"
 )
 
-type ImageNamePair struct{
-	img image.Image
+type ImageNamePair struct {
+	img      image.Image
 	filename string
 }
 
 var tests []ImageNamePair
-
 
 func setup() {
 	files, err := ioutil.ReadDir("./resources")
@@ -39,7 +38,7 @@ func setup() {
 			log.Fatal(err)
 		}
 
-		tests = append(tests, ImageNamePair{img:src, filename:file.Name()})
+		tests = append(tests, ImageNamePair{img: src, filename: file.Name()})
 
 		err = infile.Close()
 		if err != nil {
@@ -56,14 +55,48 @@ func TestMain(m *testing.M) {
 func TestAhash(t *testing.T) {
 	for _, imageNamePair := range tests {
 		hashValue := Ahash(&imageNamePair.img)
-		t.Logf("Filename: %v\t Ahash: %016x",imageNamePair.filename, hashValue)
+		t.Logf("Filename: %v\t Ahash: %016x", imageNamePair.filename, hashValue)
+	}
+}
+
+func TestDhash(t *testing.T) {
+	for _, imageNamePair := range tests {
+		hashValue := Dhash(&imageNamePair.img)
+		t.Logf("Filename: %v\t Dhash: %016x", imageNamePair.filename, hashValue)
 	}
 }
 
 func TestPhash(t *testing.T) {
 	for _, imageNamePair := range tests {
 		hashValue := Phash(&imageNamePair.img)
-		t.Logf("Filename: %v\t Ahash: %016x",imageNamePair.filename, hashValue)
+		t.Logf("Filename: %v\t Phash: %016x", imageNamePair.filename, hashValue)
+	}
+}
+
+func TestImageToGraySliced(t *testing.T) {
+	for _, imageNamePair := range tests {
+		t.Logf("Working on file: %v\n", imageNamePair.filename)
+		grayImage := imageToGray(&imageNamePair.img)
+		grayImageSliced := imageToGraySliced(&imageNamePair.img)
+		bounds := grayImage.Rect
+		found := false
+		var fx, fy int
+		for i := 0; i < bounds.Max.X; i++ {
+			for j := 0; j < bounds.Max.Y; j++ {
+				if grayImage.GrayAt(i, j) != grayImageSliced.GrayAt(i, j) {
+					found = true
+					fx = i
+					fy = j
+					break
+				}
+			}
+			if found {
+				break
+			}
+		}
+		if found {
+			t.Errorf("Found error at (%v, %v), %v, %v\n", fx, fy, grayImage.GrayAt(fx, fy), grayImageSliced.GrayAt(fx, fy))
+		}
 	}
 }
 
@@ -79,8 +112,26 @@ func BenchmarkAhash(b *testing.B) {
 	}
 }
 
+func BenchmarkDhash(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Dhash(&tests[0].img)
+	}
+}
+
 func BenchmarkPhash(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		Ahash(&tests[0].img)
+		Phash(&tests[0].img)
+	}
+}
+
+func BenchmarkImageToGray(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		imageToGray(&tests[0].img)
+	}
+}
+
+func BenchmarkImageToGraySliced(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		imageToGraySliced(&tests[0].img)
 	}
 }
