@@ -1,6 +1,5 @@
-# similar-image-finder
-A program implemented in Go that groups similar images in a given directory or finds similar images in a directory to an given image
-
+# imghash
+A package that implements image hashing algorithms in Go.
 ## Dependencies
 * [go-fourier](https://github.com/ardabasaran/go-fourier) package.
 
